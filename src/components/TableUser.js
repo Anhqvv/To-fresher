@@ -1,23 +1,32 @@
-import axios from 'axios'
+import axios from '../utils/axiosCustomze' 
 import { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
+import ReactPaginate from 'react-paginate';
 
 const TableUser = props => {
   const [listUsers, setListUsers] = useState([])
+  const [totalUsers,setTotalUsers] = useState('')
+  const [totalPages,setTotalPages] = useState('')
+  // const [page,setPage] = useState('1')
   useEffect(() => {
-    fetchAllUser()
+    fetchAllUser(1)
   }, [])
 
-  const fetchAllUser = async () => {
-    let res = await axios.get('http://localhost:8888/api/users/2')
-    if (res && res.data && res.data.data) {
-      let dataUser = res.data.data
+  const fetchAllUser = async (numberpage) => {
+    let res = await axios.get(`api/users/${numberpage}`)
+    if (res && res.data) {
+      let dataUser = res.data
       setListUsers(dataUser)
+      setTotalUsers(res.total)
+      setTotalPages(res.total_pages)
     }
-    console.log('fetchAllUser: ', res)
   }
-  console.log('listUsers', listUsers)
+
+  const handlePageClick = (e) => {
+    fetchAllUser(+e.selected + 1)
+  }
   return (
+    <>
     <Table striped bordered hover>
       <thead>
         <tr>
@@ -41,7 +50,29 @@ const TableUser = props => {
             )
           })}
       </tbody>
-    </Table>
+      </Table>
+      <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageClassName="page-item"
+        pageLinkClassName="page-link"
+        previousClassName="page-item"
+        previousLinkClassName="page-link"
+        nextClassName="page-item"
+        nextLinkClassName="page-link"
+        breakLabel="..."
+        breakClassName="page-item"
+        breakLinkClassName="page-link"
+        pageCount={totalPages}
+        marginPagesDisplayed={4}
+        pageRangeDisplayed={6}
+        onPageChange={handlePageClick }
+        containerClassName="pagination"
+        activeClassName="active"
+        forcePage={3}
+      />
+    </>
+    
   )
 }
 
