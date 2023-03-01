@@ -11,6 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-div {
-  color: red;
+.app-container {
+  .add-new{
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .table-name{
+      font-weight: 600;
+      font-size: 30px;
+    }
+  }
 }
