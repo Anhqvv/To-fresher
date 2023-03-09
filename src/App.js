@@ -5,11 +5,13 @@ import TableUser from './components/TableUser'
 import Container from 'react-bootstrap/Container'
 import ModalAddNew from './components/ModalAddNew'
 import { ToastContainer, toast } from 'react-toastify'
+import ModalEditUser from './components/ModalEditUser'
 
 const App = props => {
   const [isShowModalAddNew, setIsShowModalAddNew] = useState(false)
   const handleClose = () => {
     setIsShowModalAddNew(false)
+
   }
   return (
     <>
@@ -32,7 +34,7 @@ const App = props => {
       </div>
       <ToastContainer
         position='top-right'
-        autoClose={5000}
+        autoClose={2500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

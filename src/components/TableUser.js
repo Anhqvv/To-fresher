@@ -3,10 +3,21 @@ import Table from 'react-bootstrap/Table'
 import ReactPaginate from 'react-paginate'
 import { fetchAllUsers } from '../redux/action/action'
 import { useDispatch, useSelector } from 'react-redux'
+import ModalEditUser from './ModalEditUser'
+import ModalDelete from './ModalDelete'
 
 const TableUser = props => {
+  const [isShowModalEditUser, setIsShowModalEditUser] = useState(false)
+  const [dataUserEdit, setDataUserEdit] = useState({})
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false)
+  const [dataUserDelete, setDataUserDelete] = useState({})
+
+  const handleClose = user => {
+    setIsShowModalDelete(false)
+  }
   const dispatch = useDispatch()
   const listUsers = useSelector(state => state.user.listUsers)
+  const page = useSelector(state => state.user.page)
   const perPage = useSelector(state => state.user.perPage)
   const totalPage = useSelector(state => state.user.totalPage)
   useEffect(() => {
@@ -15,6 +26,14 @@ const TableUser = props => {
 
   const handlePageClick = e => {
     dispatch(fetchAllUsers(+e.selected + 1))
+  }
+  const handeShowModalEdit = user => {
+    setIsShowModalEditUser(true)
+    setDataUserEdit(user)
+  }
+  const handleShowModalDelete = user => {
+    setIsShowModalDelete(true)
+    setDataUserDelete(user)
   }
   return (
     <>
@@ -37,6 +56,20 @@ const TableUser = props => {
                   <td>{user.email}</td>
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
+                  <td>
+                    <button
+                      className='btn btn-warning mx-4'
+                      onClick={() => handeShowModalEdit(user)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className='btn btn-danger'
+                      onClick={() => handleShowModalDelete(user)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               )
             })}
@@ -64,6 +97,16 @@ const TableUser = props => {
         containerClassName='pagination'
         activeClassName='active'
         // forcePage={3}
+      />
+      <ModalEditUser
+        show={isShowModalEditUser}
+        handleClose={handleClose}
+        dataEdit={dataUserEdit}
+      />
+      <ModalDelete
+        show={isShowModalDelete}
+        handleClose={handleClose}
+        dataUserDelete={dataUserDelete}
       />
     </>
   )
